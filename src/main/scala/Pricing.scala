@@ -28,12 +28,12 @@ class MonteCarloCall(override val spot: Double, override val strike: Double, ove
   override def eval: Double = {
     val accr = math.exp(-interest * timeToMaturity)
 
-    val mean = (1 to N).foldLeft(0.0)((sumPrice,y)=>{
+    val mean = (1 to N).par.aggregate(0.0)((sumPrice,y)=>{
       val eps = dist.sample()
       val price = spot * math.exp(-0.5 * math.pow(sigma, 2) * timeToMaturity + sigma * eps * math.sqrt(timeToMaturity))
-      val simuPrice = math.max(price - (strike * accr), 0)
-      sumPrice + simuPrice
-    })/ N
+      val payoff = math.max(price - (strike * accr), 0)
+      sumPrice + payoff
+    },(_+_))/ N
     mean
   }
 }
