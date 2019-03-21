@@ -1,3 +1,3 @@
-A Scala implementation of a Black Scholes and Monte Carlo pricer for European call options.
+Just playing with Scala
 
 Inspired by this material: http://introcs.cs.princeton.edu/java/22library/BlackScholes.java.html
